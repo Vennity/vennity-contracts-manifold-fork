@@ -8,11 +8,11 @@ import "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol
 import "@manifoldxyz/libraries-solidity/contracts/access/AdminControlUpgradeable.sol";
 
 import "./core/ERC1155CreatorCore.sol";
-
+import "./extensions/ContractMetadataURIUpgradeable";
 /**
  * @dev ERC1155Creator implementation (using transparent upgradeable proxy)
  */
-contract ERC1155CreatorUpgradeable is AdminControlUpgradeable, ERC1155Upgradeable, ERC1155CreatorCore {
+contract ERC1155CreatorUpgradeable is AdminControlUpgradeable, ERC1155Upgradeable, ERC1155CreatorCore, ContractMetadataURIUpgradeable {
 
     mapping(uint256 => uint256) private _totalSupply;
 
@@ -98,7 +98,7 @@ contract ERC1155CreatorUpgradeable is AdminControlUpgradeable, ERC1155Upgradeabl
     function setTokenURIExtension(uint256[] memory tokenIds, string[] calldata uris) external override extensionRequired {
         require(tokenIds.length == uris.length, "Invalid input");
         for (uint i = 0; i < tokenIds.length; i++) {
-            _setTokenURIExtension(tokenIds[i], uris[i]);            
+            _setTokenURIExtension(tokenIds[i], uris[i]);
         }
     }
 
@@ -129,7 +129,7 @@ contract ERC1155CreatorUpgradeable is AdminControlUpgradeable, ERC1155Upgradeabl
     function setTokenURI(uint256[] memory tokenIds, string[] calldata uris) external override adminRequired {
         require(tokenIds.length == uris.length, "Invalid input");
         for (uint i = 0; i < tokenIds.length; i++) {
-            _setTokenURI(tokenIds[i], uris[i]);            
+            _setTokenURI(tokenIds[i], uris[i]);
         }
     }
 
@@ -238,7 +238,7 @@ contract ERC1155CreatorUpgradeable is AdminControlUpgradeable, ERC1155Upgradeabl
 
         if (to.length == 1 && tokenIds.length == 1 && amounts.length == 1) {
              // Single mint
-            _mint(to[0], tokenIds[0], amounts[0], new bytes(0));            
+            _mint(to[0], tokenIds[0], amounts[0], new bytes(0));
         } else if (to.length == 1 && tokenIds.length == amounts.length) {
             // Batch mint to same receiver
             _mintBatch(to[0], tokenIds, amounts, new bytes(0));
@@ -331,13 +331,13 @@ contract ERC1155CreatorUpgradeable is AdminControlUpgradeable, ERC1155Upgradeabl
     function getFeeBps(uint256 tokenId) external view virtual override returns (uint[] memory) {
         return _getRoyaltyBPS(tokenId);
     }
-    
+
     /**
      * @dev {See ICreatorCore-royaltyInfo}.
      */
     function royaltyInfo(uint256 tokenId, uint256 value) external view virtual override returns (address, uint256) {
         return _getRoyaltyInfo(tokenId, value);
-    } 
+    }
 
     /**
      * @dev See {IERC721Metadata-tokenURI}.
@@ -345,7 +345,7 @@ contract ERC1155CreatorUpgradeable is AdminControlUpgradeable, ERC1155Upgradeabl
     function uri(uint256 tokenId) public view virtual override returns (string memory) {
         return _tokenURI(tokenId);
     }
-    
+
     /**
      * @dev Total amount of tokens in with a given id.
      */
