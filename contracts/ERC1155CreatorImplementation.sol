@@ -2,11 +2,10 @@
 
 pragma solidity ^0.8.0;
 
-/// @author: manifold.xyz
+/// @author: vennity (forked from manifold.xyz)
 
 import "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol";
 import "@manifoldxyz/libraries-solidity/contracts/access/AdminControlUpgradeable.sol";
-
 import "./core/ERC1155CreatorCore.sol";
 
 /**
@@ -14,17 +13,33 @@ import "./core/ERC1155CreatorCore.sol";
  */
 contract ERC1155CreatorImplementation is AdminControlUpgradeable, ERC1155Upgradeable, ERC1155CreatorCore {
 
+    /*@dev add contract-level metadata uri support */
     mapping(uint256 => uint256) private _totalSupply;
+    string private cURI;
 
     /**
      * Initializer
      */
-    function initialize() public initializer {
+    function initialize(string memory _cURI) public initializer {
         __ERC1155_init("");
         __Ownable_init();
+        setContractURI(_cURI);
+    }
+
+   /**
+     * @dev gets collection details for opensea
+     */
+    function contractURI() public view returns(string memory) {
+        return cURI;
     }
 
     /**
+     * @dev sets the contract URI
+     */
+    function setContractURI(string memory _cURI) public onlyOwner virtual {
+        cURI = _cURI;
+    }
+     /**
      * @dev See {IERC165-supportsInterface}.
      */
     function supportsInterface(bytes4 interfaceId) public view virtual override(ERC1155Upgradeable, ERC1155CreatorCore, AdminControlUpgradeable) returns (bool) {
