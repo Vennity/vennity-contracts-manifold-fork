@@ -37,6 +37,13 @@ contract ERC1155CreatorUpgradeable is AdminControlUpgradeable, ERC1155Upgradeabl
     }
 
     /**
+     * @dev sets the contract URI
+    */
+    function setContractURI(string memory _cURI) external override adminRequired {
+        _setContractURI(_cURI);
+    }
+
+    /**
      * @dev See {ICreatorCore-registerExtension}.
      */
     function registerExtension(address extension, string calldata baseURI) external override adminRequired nonBlacklistRequired(extension) {

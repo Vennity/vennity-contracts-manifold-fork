@@ -37,8 +37,12 @@ abstract contract ContractMetadataURIUpgradeable is Initializable, IContractMeta
 
     /**
      * @dev sets the contract URI
-         */
-    function setContractURI(string memory _cURI) public onlyOwner virtual {
+    */
+    function setContractURI(string memory _cURI) public virtual {
+        _setContractURI(_cURI);
+    }
+
+    function _setContractURI(string memory _cURI) internal virtual {
         cURI = _cURI;
     }
 }
