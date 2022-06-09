@@ -19,9 +19,10 @@ contract ERC1155CreatorUpgradeable is AdminControlUpgradeable, ERC1155Upgradeabl
     /**
      * Initializer
      */
-    function initialize() public initializer {
+    function initialize(string memory _cURI) public initializer {
         __ERC1155_init("");
         __Ownable_init();
+         __ContractMetadataURIUpgradeable_init(_cURI);
     }
 
     /**
